@@ -908,63 +908,10 @@ textarea#msg::selection { background: rgba(0,255,224,0.2); }
   .welcome-headline { font-size: 1.8rem; }
 }
 
-/* ── AUTH CHECK OVERLAY (shown briefly while Firebase verifies the session) ── */
-#authCheck {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-void);
-  color: var(--cyan);
-  font-family: 'Orbitron', monospace;
-  font-size: 13px;
-  letter-spacing: 0.1em;
-  animation: fadeInOverlay 0.4s ease;
-}
-@keyframes fadeInOverlay {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-#authCheck.hidden { display: none; }
 
-/* ── USER BADGE ── */
-.user-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 14px;
-  border: 1px solid var(--border-cyan);
-  border-radius: 20px;
-  background: rgba(0,255,224,0.04);
-  font-size: 11px;
-  color: var(--cyan-dim);
-  font-family: 'Orbitron', monospace;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-.user-badge:hover {
-  background: rgba(255,0,170,0.08);
-  border-color: var(--magenta);
-  color: var(--magenta);
-}
-.user-badge-dot {
-  width: 6px; height: 6px;
-  background: var(--magenta);
-  border-radius: 50%;
-  box-shadow: 0 0 6px var(--magenta);
-  flex-shrink: 0;
-}
 </style>
 </head>
 <body>
-
-<!-- ── AUTH CHECK OVERLAY ── -->
-<!-- يظهر للحظة فقط أثناء تحقق Firebase من جلسة المستخدم، ثم يُزال أو يُوجَّه المستخدم لصفحة تسجيل الدخول -->
-<div id="authCheck">جارٍ التحقق من الهوية…</div>
 
 <!-- Corner decorations -->
 <div class="corner-decor corner-tl"></div>
@@ -1013,11 +960,7 @@ textarea#msg::selection { background: rgba(0,255,224,0.2); }
         <div class="status-dot"></div>
         ONLINE · GROQ
       </div>
-      <div class="user-badge" onclick="logout()" title="تسجيل الخروج" id="userBadge" style="display:none">
-        <div class="user-badge-dot"></div>
-        <span id="userBadgeName"></span>
       </div>
-    </div>
   </div>
 
   <div class="chat-area" id="chatArea">
@@ -1096,124 +1039,6 @@ textarea#msg::selection { background: rgba(0,255,224,0.2); }
       background: ${Math.random() > 0.7 ? '#ff00aa' : '#00ffe0'};
     `;
     container.appendChild(p);
-  }
-})();
-
-/* ── AUTH LOGIC ── */
-const USERS_KEY = 'omnia_users';
-const SESSION_KEY = 'omnia_session';
-
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; } catch { return {}; }
-}
-function saveUsers(users) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
-function getCurrentUser() {
-  return localStorage.getItem(SESSION_KEY) || null;
-}
-function setCurrentUser(username) {
-  localStorage.setItem(SESSION_KEY, username);
-}
-function clearSession() {
-  localStorage.removeItem(SESSION_KEY);
-}
-
-function showRegister() {
-  document.getElementById('loginPanel').style.display = 'none';
-  document.getElementById('registerPanel').style.display = 'block';
-  document.getElementById('loginError').style.display = 'none';
-  document.getElementById('regUser').focus();
-}
-function showLogin() {
-  document.getElementById('registerPanel').style.display = 'none';
-  document.getElementById('loginPanel').style.display = 'block';
-  document.getElementById('registerError').style.display = 'none';
-  document.getElementById('loginUser').focus();
-}
-
-function loginSubmit() {
-  const username = document.getElementById('loginUser').value.trim();
-  const password = document.getElementById('loginPass').value;
-  const errEl = document.getElementById('loginError');
-  if (!username || !password) {
-    errEl.textContent = 'يرجى ملء جميع الحقول';
-    errEl.style.display = 'block'; return;
-  }
-  const users = getUsers();
-  if (!users[username] || users[username] !== btoa(password)) {
-    errEl.textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة';
-    errEl.style.display = 'block';
-    document.getElementById('loginPass').value = ''; return;
-  }
-  errEl.style.display = 'none';
-  doLogin(username);
-}
-
-function registerSubmit() {
-  const username = document.getElementById('regUser').value.trim();
-  const pass1 = document.getElementById('regPass').value;
-  const pass2 = document.getElementById('regPass2').value;
-  const errEl = document.getElementById('registerError');
-
-  if (!username || !pass1 || !pass2) {
-    errEl.textContent = 'يرجى ملء جميع الحقول';
-    errEl.style.display = 'block'; return;
-  }
-  if (username.length < 3) {
-    errEl.textContent = 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل';
-    errEl.style.display = 'block'; return;
-  }
-  if (pass1.length < 6) {
-    errEl.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
-    errEl.style.display = 'block'; return;
-  }
-  if (pass1 !== pass2) {
-    errEl.textContent = 'كلمتا المرور غير متطابقتين';
-    errEl.style.display = 'block'; return;
-  }
-  const users = getUsers();
-  if (users[username]) {
-    errEl.textContent = 'اسم المستخدم مستخدم بالفعل';
-    errEl.style.display = 'block'; return;
-  }
-  users[username] = btoa(pass1);
-  saveUsers(users);
-  errEl.style.display = 'none';
-  doLogin(username);
-}
-
-function doLogin(username) {
-  setCurrentUser(username);
-  document.getElementById('loginOverlay').classList.add('hidden');
-  const badge = document.getElementById('userBadge');
-  badge.style.display = 'flex';
-  document.getElementById('userBadgeName').textContent = username.toUpperCase();
-  showToast('✦ أهلاً ' + username + '!');
-}
-
-function logout() {
-  if (!confirm('هل تريد تسجيل الخروج؟')) return;
-  clearSession();
-  document.getElementById('loginOverlay').classList.remove('hidden');
-  document.getElementById('userBadge').style.display = 'none';
-  document.getElementById('loginUser').value = '';
-  document.getElementById('loginPass').value = '';
-  document.getElementById('loginError').style.display = 'none';
-  showLogin();
-  newChat();
-}
-
-// Check session on load
-(function checkAuth() {
-  const user = getCurrentUser();
-  if (user) {
-    document.getElementById('loginOverlay').classList.add('hidden');
-    const badge = document.getElementById('userBadge');
-    badge.style.display = 'flex';
-    document.getElementById('userBadgeName').textContent = user.toUpperCase();
-  } else {
-    setTimeout(() => document.getElementById('loginUser')?.focus(), 400);
   }
 })();
 

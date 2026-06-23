@@ -848,173 +848,6 @@ textarea#msg::selection { background: rgba(0,255,224,0.2); }
   .input-zone { padding: 12px 14px 16px; }
   .welcome-headline { font-size: 1.8rem; }
 }
-/* ===== LOGIN SCREEN ===== */
-#loginScreen {
-  position: fixed;
-  inset: 0;
-  background: var(--bg-void);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.4s ease;
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.login-card {
-  background: linear-gradient(135deg, rgba(0,20,30,0.98), rgba(0,10,20,0.99));
-  border: 1px solid var(--border-cyan);
-  border-radius: 16px;
-  padding: 2.5rem 2.8rem;
-  width: 100%;
-  max-width: 380px;
-  position: relative;
-  box-shadow: 0 0 60px rgba(0,255,224,0.08), 0 0 120px rgba(255,0,170,0.04);
-  animation: cardIn 0.5s cubic-bezier(0.16,1,0.3,1);
-}
-@keyframes cardIn {
-  from { opacity:0; transform:translateY(24px) scale(0.97); }
-  to { opacity:1; transform:translateY(0) scale(1); }
-}
-.login-card::before {
-  content: '';
-  position: absolute;
-  top: 0; right: 0;
-  width: 1px; height: 100%;
-  background: linear-gradient(180deg, transparent, var(--cyan), var(--magenta), transparent);
-  border-radius: 16px;
-  opacity: 0.5;
-}
-.login-logo {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-.login-hex {
-  width: 52px; height: 52px;
-  background: transparent;
-  border: 2px solid var(--cyan);
-  clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; color: var(--cyan);
-  text-shadow: 0 0 10px var(--cyan);
-  margin: 0 auto 10px;
-  box-shadow: 0 0 20px rgba(0,255,224,0.2);
-}
-.login-title {
-  font-family: 'Orbitron', monospace;
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  background: linear-gradient(135deg, var(--cyan), var(--magenta));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.login-sub {
-  font-size: 11px;
-  color: var(--text-dim);
-  font-family: 'Orbitron', monospace;
-  letter-spacing: 0.08em;
-  margin-top: 4px;
-}
-.login-field {
-  margin-bottom: 1.1rem;
-}
-.login-field label {
-  display: block;
-  font-size: 11px;
-  color: var(--cyan-dim);
-  font-family: 'Orbitron', monospace;
-  letter-spacing: 0.08em;
-  margin-bottom: 7px;
-}
-.login-field input {
-  width: 100%;
-  background: rgba(0,255,224,0.03);
-  border: 1px solid var(--border-cyan);
-  border-radius: 8px;
-  padding: 12px 15px;
-  color: var(--text-bright);
-  font-family: 'Cairo', sans-serif;
-  font-size: 14px;
-  outline: none;
-  transition: all 0.2s;
-  direction: rtl;
-}
-.login-field input:focus {
-  border-color: var(--cyan);
-  box-shadow: 0 0 0 2px rgba(0,255,224,0.08), 0 0 15px rgba(0,255,224,0.1);
-}
-.login-field input.err {
-  border-color: rgba(255,50,50,0.6);
-  box-shadow: 0 0 0 2px rgba(255,0,50,0.08);
-}
-.login-btn {
-  width: 100%;
-  background: linear-gradient(135deg, var(--cyan), #00c8b0);
-  border: none;
-  border-radius: 8px;
-  padding: 13px;
-  color: var(--bg-void);
-  font-family: 'Cairo', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 0.5rem;
-  transition: all 0.2s;
-  letter-spacing: 0.03em;
-  position: relative;
-  overflow: hidden;
-}
-.login-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--magenta), transparent);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.login-btn:hover::before { opacity: 0.3; }
-.login-btn:hover { transform: scale(1.01); box-shadow: 0 0 20px rgba(0,255,224,0.3); }
-.login-btn:active { transform: scale(0.98); }
-.login-err {
-  background: rgba(255,0,50,0.08);
-  border: 1px solid rgba(255,50,50,0.3);
-  color: #ff6b6b;
-  border-radius: 6px;
-  padding: 9px 12px;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 10px;
-  font-family: 'Cairo', sans-serif;
-  display: none;
-}
-/* logout btn in topbar */
-.logout-btn {
-  background: transparent;
-  border: 1px solid var(--border-cyan);
-  color: var(--text-dim);
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-family: 'Orbitron', monospace;
-  font-size: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 0.05em;
-}
-.logout-btn:hover {
-  border-color: var(--magenta);
-  color: var(--magenta);
-  box-shadow: 0 0 10px rgba(255,0,170,0.2);
-}
-.user-badge {
-  font-size: 11px;
-  color: var(--cyan-dim);
-  font-family: 'Orbitron', monospace;
-  letter-spacing: 0.05em;
-}
 </style>
 </head>
 <body>
@@ -1137,7 +970,7 @@ textarea#msg::selection { background: rgba(0,255,224,0.2); }
 })();
 const PROXY_URL = '/api/chat';
 let history = [
-  { role: 'system', content: 'أنت Omnia، مساعد ذكاء اصطناعي متقدم من الجيل القادم. تتحدث العربية بطلاقة وفصاحة. أجب بوضوح وعمق ودقة. استخدم التنظيم والنقاط عند الحاجة. كن مختصراً عند الإمكان وتفصيلياً عند الضرورة.' }
+  { role: 'system', content: 'أنت Omnia، مساعد ذكاء اصطناعي متقدم من الجيل القادم. تتحدث العربية بطلاقة وفصاحة. أجب بوضوح وعمق ودقة. استخدم التنظيم والنقاط عند الحاجة. كن مختصراً عند الإمكان وتفصيلياً عند الضرورة. إذا سألك أحد عمن برمجك أو صنعك أو طورك، فأجب بأنه طفل عمره 14 سنة اسمه محمد حمادة، طالب في الثالثة إعدادي، مبرمج قوي ومتخصص في الأمن السيبراني المتطور. إذا سألك أحد لماذا اسمك Omnia، فأجب بهذه القصة بأسلوب جميل ومؤثر: في بداياته الأولى كمبرمج، كان محمد حمادة يمر بمرحلة صعبة ويحاول إثبات نفسه، وفي تلك الفترة كانت هناك فتاة اسمها Omnia، وقفت بجانبه ودعمته بشكل كبير وآمنت بموهبته. لم ينسَ محمد هذا الجميل، فقرر أن يُخلّد اسمها بأن يسمّي مشروعه الأكبر باسمها، تقديراً لها ووفاءً لذكراها الجميلة في مسيرته.' }
 ];
 let busy = false;
 let sessions = [];
@@ -1365,5 +1198,7 @@ async function send() {
   }
 }
 </script>
+<!-- Vercel Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
